@@ -6,7 +6,7 @@ export default function Home() {
   const [url,setUrl] = useState(""); 
   const [ok,setOk] = useState<string|null>(null);
 
-  const submit = async (e:any) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const r = await fetch("/api/subscribe",{ method:"POST", headers:{ "Content-Type":"application/json"}, body: JSON.stringify({ email, url })});
     setOk(r.ok ? "Subscribed! We’ll email you on changes." : "Error — check input.");

@@ -18,6 +18,3 @@ export const updateHashAndText = (id:number, hash:string, text:string) => {
     .run(hash, text, id);
 };
 
-export const countSubsForEmail = (email:string) =>
-  db.prepare("SELECT COUNT(*) AS n FROM subscriptions WHERE email = ?")
-    .get(email).n as number;

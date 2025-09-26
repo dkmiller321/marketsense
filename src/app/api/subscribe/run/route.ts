@@ -3,12 +3,14 @@ import { allSubs, updateHash,updateHashAndText } from "@/lib/subscriptions";
 import { fetchText, hashText, diffText } from "@/lib/fetchAndHash";
 import { sendAlert } from "@/lib/email";
 
+type RunResult = { id: number; url: string; changed?: boolean; error?: string; };
+
 
 export const dynamic = "force-dynamic"; // ensure it runs server-side fresh
 
 export async function POST() {
   const subs = allSubs();
-  const results:any[] = [];
+  const results: RunResult[] = [];
   for (const sub of subs) {
     try {
       const text = await fetchText(sub.url);
@@ -27,8 +29,8 @@ export async function POST() {
       } else {
         results.push({ id: sub.id, changed:false, url: sub.url });
       }
-    } catch (e:any) {
-      results.push({ id: sub.id, error: e?.message ?? String(e) });
+    } catch (e: unknown) {
+      results.push({ id: sub.id, url: sub.url, error: e instanceof Error ? e.message : String(e) });
     }
   }
   return NextResponse.json({ ok:true, results });
